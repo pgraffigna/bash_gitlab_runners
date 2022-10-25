@@ -1,0 +1,32 @@
+# configuración ldap
+editar /etc/gitlab/gitlab.rb
+==> external_url: http://gitlab.cultura.lab
+
+gitlab_rails['ldap_enabled'] = true
+gitlab_rails['ldap_servers'] = YAML.load <<-'EOS'
+   main: # 'main' is the GitLab 'provider ID' of this LDAP server
+     label: 'LDAP CULTURA'
+     host: '192.168.121.217'
+     port: 389
+     uid: 'uid'
+     bind_dn: 'cn=admin,dc=cultura,dc=lab'
+     password: 'eteZZisn'
+     encryption: 'plain'
+     verify_certificates: false
+     smartcard_auth: false
+     active_directory: false
+     allow_username_or_email_login: true
+     lowercase_usernames: false
+     block_auto_created_users: true
+     base: 'dc=cultura,dc=lab'
+     user_filter: '(&(uid=*)(objectClass=*)(street=ovpn))'
+EOS
+
+# aplicar cambios
+gitlab-ctl reconfigure
+
+# testear la conexion LDAP
+gitlab-rake gitlab:ldap:check
+
+# resetear password usuarios
+gitlab-rake 'gitlab:password:reset[root]'
