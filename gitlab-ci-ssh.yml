@@ -1,0 +1,23 @@
+default:
+  image: centos:centos7
+
+stages:
+  - validate
+  - deploy
+
+validate:
+  stage: validate
+  script:
+    - yum update -y
+    - yum install -y samba
+    - testparm -s smb.conf
+
+deploy:
+  stage: deploy
+  script:
+    - yum install -y openssh-clients
+    - mkdir -p ~/.ssh
+    - cat ${gitlab_key} > ~/.ssh/id_rsa
+    - chmod 600 ~/.ssh/id_rsa
+    - scp -o StrictHostKeyChecking=no -o PreferredAuthentications=publickey smb.conf 192.168.121.162:/etc/samba/smb.conf
+    - ssh -o StrictHostKeyChecking=no -o PreferredAuthentications=publickey 192.168.121.162 "systemctl restart smbd.service"

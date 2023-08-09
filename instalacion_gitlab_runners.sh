@@ -1,20 +1,31 @@
 #!/bin/bash
-# script para crear gitlab-runners
+# colores
+VERDE="\e[0;32m\033[1m"
+ROJO="\e[0;31m\033[1m"
+AMARILLO="\e[0;33m\033[1m"
+FIN="\033[0m\e[0m"
+
+# ctrl-C
+trap ctrl_c INT
+function ctrl_c(){
+        echo -e "\n${rojo}Programa Terminado por el usuario ${end}"
+        exit 0
+}
 
 # variables
 GIT_RUNNER_URL="https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64"
 
-# instalando docker
+echo -e "${AMARILLO}Instalando docker ${FIN}"
 sudo apt update && sudo apt install -y docker.io
 
-# descargando binario
+echo -e "${AMARILLO}Descargando gitlab-runner ${FIN}"
 sudo curl -L "${GIT_RUNNER_URL}" --output /usr/local/bin/gitlab-runner
 
-# agregando permisos de ejecución 
+echo -e "${AMARILLO}Cambiando permisos ${FIN}"
 sudo chmod +x /usr/local/bin/gitlab-runner
 
-# agregando usuario gitlab-runner
+echo -e "${AMARILLO}Creando usuario para los runners ${FIN}"
 sudo useradd --comment 'usuario gitlab runner' --create-home gitlab-runner --shell /bin/bash
 
-# instalando servicio gitlab-runner
+echo -e "${AMARILLO}Instalando servicio + Iniciando ${FIN}"
 sudo gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner && sudo gitlab-runner start

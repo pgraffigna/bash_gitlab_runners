@@ -1,10 +1,10 @@
 #!/bin/bash
 # script para crear runners
 
-GITLAB_URL="http://gitlab.cultura.lab"
-TOKEN=GR1348941bnMcZ1cux8ZSsfT4ssts
+GITLAB_URL="http://gitlab.home.local"
+TOKEN=wixm9sdqVX_1KdbmZ9CJ
 DOCKER_IMAGE="alpine:latest"
-TAGS="cultura,test"
+TAGS="docker"
 
 gitlab-runner register --non-interactive \
   --url ${GITLAB_URL} \
