@@ -1,0 +1,38 @@
+default:
+  image: gitlab.cultura.local:5000/pgraffigna/ct-bullseye-slim:v1
+
+stages:
+  - validate
+  - deploy
+
+variables:
+  SSH_OPTIONS: "${cultura_ssh} -o StrictHostKeyChecking=no -o PreferredAuthentications=publickey"
+
+before_script:
+  - echo "=== Configurando las llaves para acceso remoto ==="
+  - mkdir -p ~/.ssh
+  - eval $(ssh-agent -s)
+  - echo "${runners}" | tr -d '\r' > ~/.ssh/id_rsa
+  - chmod 600 ~/.ssh/id_rsa
+  - ssh-add ~/.ssh/id_rsa
+
+validate:
+  stage: validate
+  script:
+    - echo "=== Chequeando el estado del servicio en el servidor remoto ==="
+    - ssh -p $SSH_OPTIONS "${sw_monitoreo_host}" "if systemctl is-active --quiet telegraf.service; then echo 'El servicio está online..seguimos con el despliegue'; else echo 'El servicio está offline..terminando el despliegue' >&2; exit 1; fi"
+
+deploy:
+  stage: deploy
+  script:
+    - echo "=== Actualizando configuracion telegraf y reiniciando servicio ==="
+    - ssh -p $SSH_OPTIONS "${sw_monitoreo_host}" "cp /etc/telegraf/telegraf.conf /home/sistemas/telegraf-$(date +%Y%m%d).conf.bk"
+    - scp -P $SSH_OPTIONS telegraf.conf "${sw_monitoreo_host}":/etc/telegraf/telegraf.conf
+    - ssh -p $SSH_OPTIONS "${sw_monitoreo_host}" "systemctl restart telegraf.service"
+
+
+## crear llaves en host donde corre el runner
+# ssh-keygen -t rsa -b 2048 -m PEM -C runner -f ~/.ssh/id_rsa
+
+## copiar llave publica en equipo remoto
+# echo 'ID_RSA.PUB' >> ~/.ssh/authorized_keys

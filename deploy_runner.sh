@@ -1,10 +1,10 @@
 #!/bin/bash
 # script para crear runners
 
-GITLAB_URL="http://gitlab.home.local"
-TOKEN=wixm9sdqVX_1KdbmZ9CJ
-DOCKER_IMAGE="alpine:latest"
-TAGS="docker"
+GITLAB_URL="http://gitlab.cultura.local"
+TOKEN=TOKEN
+DOCKER_IMAGE="centos:8"
+#TAGS="docker"
 
 gitlab-runner register --non-interactive \
   --url ${GITLAB_URL} \
@@ -15,7 +15,7 @@ gitlab-runner register --non-interactive \
   --docker-pull-policy always \
   --locked=false \
   --run-untagged=false \
-  --docker-privileged=false \
-  --tag-list ${TAGS}
+  --docker-privileged=false
+# --tag-list ${TAGS}
 
 gitlab-runner verify

@@ -1,5 +1,5 @@
 ENV['VAGRANT_DEFAULT_PROVIDER'] = 'libvirt'
-IMAGEN = "generic/ubuntu2004"
+IMAGEN = "generic/ubuntu2204"
 HOSTNAME = "gitlab.home.local"
 
 Vagrant.configure("2") do |config|
@@ -10,11 +10,13 @@ Vagrant.configure("2") do |config|
     s.vm.box = IMAGEN
     s.vm.hostname = HOSTNAME
     s.vm.box_check_update = false
+    #s.vm.network "forwarded_port", guest: 80, host: 8000, host_ip: "*", gateway_ports: true
 
     s.vm.provider :libvirt do |v|
-      v.memory = 2048
+      v.disk_bus = 'virtio'
+      v.memory = 4096
       v.cpus = 2
-      v.graphics_type = "none"
+      v.graphics_type = 'none'
     end
   end
 end

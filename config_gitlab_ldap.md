@@ -1,7 +1,7 @@
 # configuración ldap
-editar /etc/gitlab/gitlab.rb
-==> external_url: http://gitlab.home.lab
+## editar /etc/gitlab/gitlab.rb
 
+```shell
 gitlab_rails['ldap_enabled'] = true
 gitlab_rails['ldap_servers'] = YAML.load <<-'EOS'
    main:
@@ -21,12 +21,16 @@ gitlab_rails['ldap_servers'] = YAML.load <<-'EOS'
      base: 'dc=home,dc=lab'
      user_filter: '(&(uid=*)(objectClass=*))'
 EOS
-
+```
 # aplicar cambios
+```shell
 gitlab-ctl reconfigure
-
+```
 # testear la conexion LDAP
+```shell
 gitlab-rake gitlab:ldap:check
-
+```
 # resetear password usuarios
+```shell
 gitlab-rake 'gitlab:password:reset[root]'
+```
