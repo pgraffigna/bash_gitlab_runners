@@ -34,7 +34,8 @@ echo -e "${AMARILLO}=== Cambiando permisos ===${FIN}"
 sudo chmod +x /usr/local/bin/gitlab-runner
 
 echo -e "${AMARILLO}=== Creando usuario para los runners ===${FIN}"
-sudo useradd --comment 'usuario gitlab runner' --create-home gitlab-runner --shell /bin/bash
+sudo useradd --comment 'usuario gitlab-runner' --create-home gitlab-runner --shell /bin/bash
 
 echo -e "${AMARILLO}=== Instalando servicio + Iniciando ===${FIN}"
-sudo gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner && sudo gitlab-runner start
+sudo gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner
+sudo gitlab-runner start

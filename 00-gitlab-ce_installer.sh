@@ -19,7 +19,7 @@ function ctrl_c(){
 }
 
 # variables
-VERSION="17.3.6"
+VERSION="18.7.5"
 GITLAB_URL="https://packages.gitlab.com/gitlab/gitlab-ce/packages/ubuntu/jammy/gitlab-ce_${VERSION}-ce.0_amd64.deb/download.deb"
 
 echo -e "${AMARILLO}=== Descargando GitLab ===${FIN}"

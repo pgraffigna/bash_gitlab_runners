@@ -11,8 +11,6 @@ shutdown_timeout = 0
   url = "http://gitlab.home.local"
   id = 3
   token = "TOKEN"
-  token_obtained_at = 2023-08-08T14:16:07Z
-  token_expires_at = 0001-01-01T00:00:00Z
   executor = "docker"
   listen_address="http://gitlab.home.local" ## opcional
   [runners.cache]
@@ -28,3 +26,8 @@ shutdown_timeout = 0
     pull_policy = ["always"]
     shm_size = 0
     extra_hosts = ["gitlab.home.local:192.168.121.77"] ## opcional
+
+# runner-f1a3ccc012
+# glrt-FD94T415_rXflyySyvP-GW86MQp0OjEKdToxCw.01.12050v3sz
+# sudo gitlab-runner verify
+

@@ -1,8 +1,8 @@
 #!/bin/bash
 # script para crear runners
 
-GITLAB_URL="http://gitlab.cultura.local"
-TOKEN=TOKEN
+GITLAB_URL="http://gitlab.home.local"
+TOKEN=glrt-FD94T415_rXflyySyvP-GW86MQp0OjEKdToxCw.01.12050v3sz
 DOCKER_IMAGE="centos:8"
 #TAGS="docker"
 

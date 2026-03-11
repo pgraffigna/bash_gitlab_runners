@@ -18,20 +18,55 @@ git clone https://github.com/pgraffigna/bash_gitlab_runners
 cd bash_gitlab_runners
 vagrant up
 vagrant upload install_gitlab-ce.sh
-vagrant ssh 
+vagrant ssh
 chmod +x install_gitlab-ce.sh
 ./install_gitlab-ce.sh
 ```
 
+---
+
 ### Scripts:
-- gitlab-ci.yml
-- gitlab-ci-kaniko.yml
-- install_gitlab-ce.sh
-- install_gitlab_runners.sh
-- deploy_runners.sh
+- 00-install_gitlab-ce.sh
+- 01-install_gitlab_runners.sh
+- 02-deploy_runners.sh
+
+---
 
 ### Extras:
 - Vagrantfile: *Archivo de configuración para desplegar una VM descartable con ubuntu-22.04 con libvirt como hipervisor.*
-- config_docker_registry.md: *Notas sobre la configuración de un registro de contenedores local.*
-- config_gitlab_ldap.md: *Notas sobre la implementación de ldap para validar la autenticación en gitlab.*
 - sample-config.toml: *Archivo de configuración de los gitlab runners.*
+- AGENTS.md: *resumen de opencode sobre el repositorio*
+
+---
+
+### Notas sobre configuracion de registro en gitlab-ce
+# configurar registro docker local (modo inseguro)
+```shell
+editar /etc/gitlab/gitlab.rb
+- registry_external_url 'http://gitlab.home.local:5000'
+- registry['enable'] = true
+- registry['registry_http_addr'] = "0.0.0.0:5000"
+- registry_nginx['enable'] = false
+```
+
+---
+
+# aplicar los cambios
+```shell
+gitlab-ctl reconfigure
+gitlab-ctl restart
+```
+
+---
+
+# configurar runner para que pueda acceder al registro via http
+```shell
+editar /etc/docker/daemon.json
+
+    {
+    "insecure-registries" : ["gitlab.cultura.local:5000"]
+    }
+
+systemctl restart docker.service
+```
+
