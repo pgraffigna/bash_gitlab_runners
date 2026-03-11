@@ -39,28 +39,20 @@ chmod +x install_gitlab-ce.sh
 
 ---
 
-### Notas sobre configuracion de registro en gitlab-ce
-# configurar registro docker local (modo inseguro)
+### Notas sobre configuracion de docker registry en gitlab-ce:
 ```shell
+# configurar registro docker local (en server)
 editar /etc/gitlab/gitlab.rb
 - registry_external_url 'http://gitlab.home.local:5000'
 - registry['enable'] = true
 - registry['registry_http_addr'] = "0.0.0.0:5000"
 - registry_nginx['enable'] = false
-```
-
----
 
 # aplicar los cambios
-```shell
 gitlab-ctl reconfigure
 gitlab-ctl restart
-```
 
----
-
-# configurar runner para que pueda acceder al registro via http
-```shell
+# configurar el runner para que pueda acceder al registry
 editar /etc/docker/daemon.json
 
     {
